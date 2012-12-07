@@ -37,7 +37,7 @@ namespace InspectorIT.DataExpose.Components.Services
         /// <param name="mapRouteManager">The map route manager.</param>
         public void RegisterRoutes(IMapRoute mapRouteManager)
         {
-            mapRouteManager.MapHttpRoute("DataExpose", "default", "{controller}/{action}", new[] { "InspectorIT.DataExpose.Components.Services" });
+            mapRouteManager.MapHttpRoute("InspectorIT/DataExpose", "default", "{controller}/{action}", new[] { "InspectorIT.DataExpose.Components.Services" });
         }
         
     }

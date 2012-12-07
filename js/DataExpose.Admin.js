@@ -67,8 +67,8 @@
         $("#iit_ProcName").val(feed.ProcName);
         $("#iit_ID").val(feed.ID);
         $("#iit_Roles").val(feed.Roles);
-        $("#iit_TestFeed").attr("target", "_blank").attr("href", opts.servicesFramework.getServiceRoot("DataExpose") + "Services/Execute?feed=" + feed.Name + "&feedParams=").show();
-        $("#iit_feedUrl").val(opts.servicesFramework.getServiceRoot("DataExpose") + "Services/Execute?feed=" + feed.Name + "&feedParams=");
+        $("#iit_TestFeed").attr("target", "_blank").attr("href", opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + "Services/Execute?feed=" + feed.Name + "&feedParams=").show();
+        $("#iit_feedUrl").val(opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + "Services/Execute?feed=" + feed.Name + "&feedParams=");
         if(switchTabs==null || switchTabs) {
             tabs.tabs('select', 0);
         }
@@ -116,7 +116,7 @@
             
             $.ajax({
                 type: "POST",
-                url: opts.servicesFramework.getServiceRoot("DataExpose") + 'Services/GetFeedList ',
+                url: opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + 'Services/GetFeedList ',
                 dataType:'json',
                 beforeSend: opts.servicesFramework.setModuleHeaders,
                 success: function(data) {
@@ -154,7 +154,7 @@
 
             $.ajax({
                 type: "POST",
-                url: opts.servicesFramework.getServiceRoot("DataExpose") + "Services/GetFeedDetails",
+                url: opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + "Services/GetFeedDetails",
                 dataType: 'json',
                 beforeSend: opts.servicesFramework.setModuleHeaders,
                 data: {feedId: parseInt($(this).attr("feedId"))},
@@ -194,7 +194,7 @@
 
             $.ajax({
                 type: "POST",
-                url: opts.servicesFramework.getServiceRoot("DataExpose") + "Services/SaveFeed",
+                url: opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + "Services/SaveFeed",
                 dataType: 'json',
                 beforeSend: opts.servicesFramework.setModuleHeaders,
                 data: feed,
@@ -215,7 +215,7 @@
                 if ($("#iit_ID").val() != "") {
                     $.ajax({
                         type: "POST",
-                        url: opts.servicesFramework.getServiceRoot("DataExpose") + "Services/DeleteFeed",
+                        url: opts.servicesFramework.getServiceRoot("InspectorIT/DataExpose") + "Services/DeleteFeed",
                         dataType: 'json',
                         beforeSend: opts.servicesFramework.setModuleHeaders,
                         data: { feedId: parseInt($("#iit_ID").val()) },
