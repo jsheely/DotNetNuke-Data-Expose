@@ -1,0 +1,79 @@
+﻿.iit_Admin { width: 100%; }
+
+.iit_feedList ul li
+{
+    list-style-type:none;
+    margin:0px;
+    padding:5px 0px;
+    font-size:12px;
+    
+}
+
+.iit_LeftColumn { width: 300px;}
+
+.iit_feedList ul 
+{
+    margin:0px;
+    padding:0px;
+}
+
+
+.iit_feedList
+{
+    width:300px; 
+    height:300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.iit_listWrench {
+    float: left;
+    position: relative;
+    top: 1px;
+    margin-right: 8px;
+}
+
+.iit_FeedSelected {
+    background-color: #D6E8F5 !important;
+}
+
+.iit_feedDetails 
+{
+    margin-left: 10px;
+    width: 100%;
+}
+
+.iit_largeTextbox { width:98%; }
+.iit_textArea { height:50px; }
+
+.iit_SQLBox { height:300px;}
+
+.iit_saveButtons 
+{
+    float:right; 
+    margin-top:10px;
+}
+
+.iit_saveButtons input 
+{
+    height:35px; 
+    width:100px; 
+    font-weight:bold;
+}
+
+.iit_alerts 
+{
+    float:left;
+    display:none;
+    padding:5px;
+    font-weight:bold;
+    font-size:14px;
+    width:330px; 
+    border-style:dashed;
+    border-color:#00CC32;
+    min-height:25px;
+    background-color:#9CE665;
+    margin:10px 0px;
+}
+
+.iit_feedResults {}

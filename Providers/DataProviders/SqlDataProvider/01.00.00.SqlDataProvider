@@ -1,0 +1,171 @@
+﻿IF  EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DF_InspectorIT_DataExpose_Feeds_ModifiedByDate]') AND type = 'D')
+BEGIN
+ALTER TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds] DROP CONSTRAINT [DF_InspectorIT_DataExpose_Feeds_ModifiedByDate]
+END
+
+GO
+IF  EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DF__Inspector__dateC__5DD5DC5C]') AND type = 'D')
+BEGIN
+ALTER TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds] DROP CONSTRAINT [DF__Inspector__dateC__5DD5DC5C]
+END
+
+GO
+/****** Object:  Table {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds]') AND type in (N'U'))
+DROP TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]') AND type in (N'P', N'PC'))
+DROP PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC {databaseOwner}{objectQualifier}sp_executesql @statement = N'/****** Object:  StoredProcedure {databaseOwner}{objectQualifier}[InspectorIT_DataExpose_Delete_Feed]    Script Date: 12/1/2012 1:10:37 PM ******/
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Delete_Feed]
+@id INT
+AS
+
+DELETE FROM {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds WHERE id=@id' 
+END
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC {databaseOwner}{objectQualifier}sp_executesql @statement = N'create procedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feed]
+@feedId int
+as
+
+select * from {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds where ID=@feedId' 
+END
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC {databaseOwner}{objectQualifier}sp_executesql @statement = N'/****** Object:  StoredProcedure {databaseOwner}{objectQualifier}[InspectorIT_DataExpose_Get_FeedByName]    Script Date: 12/1/2012 1:11:30 PM ******/
+create procedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_FeedByName]
+@name nvarchar(200)
+as
+
+select * from {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds where Name = @name' 
+END
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC {databaseOwner}{objectQualifier}sp_executesql @statement = N'/****** Object:  StoredProcedure {databaseOwner}{objectQualifier}[InspectorIT_DataExpose_Get_Feeds]    Script Date: 12/1/2012 1:11:48 PM ******/
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Get_Feeds]
+AS
+
+SELECT * FROM {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds' 
+END
+GO
+/****** Object:  StoredProcedure {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC {databaseOwner}{objectQualifier}sp_executesql @statement = N'/****** Object:  StoredProcedure {databaseOwner}{objectQualifier}[InspectorIT_DataExpose_Update_Feed]    Script Date: 12/1/2012 1:12:07 PM ******/
+CREATE PROCEDURE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Update_Feed]
+@id int,
+@name nvarchar(200),
+@Desc nvarchar(500),
+@procName nvarchar(200),
+@SQL nvarchar(max),
+@Roles nvarchar(max),
+@UserId int
+as
+
+if ( @id = -1 )
+	begin
+		insert into {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds (name,[Description],procName,[SQL],Roles,CreatedByUserId,ModifiedByUserId)
+		values (@name,@Desc,@procName,@SQL,@Roles,@UserId,@UserId)
+
+		select * from {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds where id=SCOPE_IDENTITY()
+	end
+else
+	begin
+		update {databaseOwner}{objectQualifier}InspectorIT_DataExpose_Feeds 
+			set 
+				name=@name,[Description]=@desc,procName=@procName,[SQL]=@SQL,
+				Roles=@Roles,
+				ModifiedByUserId=@UserId,
+				ModifiedOnDate=getdate()
+			where id=@id
+
+			select @id
+	end' 
+END
+GO
+/****** Object:  Table {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds]    Script Date: 12/5/2012 11:41:00 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds]') AND type in (N'U'))
+BEGIN
+CREATE TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](200) NOT NULL,
+	[Description] [nvarchar](500) NULL,
+	[ProcName] [nvarchar](200) NULL,
+	[SQL] [nvarchar](max) NULL,
+	[SecurityKey] [nvarchar](200) NULL,
+	[Roles] [nvarchar](max) NULL,
+	[CreatedOnDate] [datetime] NOT NULL,
+	[CreatedByUserId] [int] NOT NULL,
+	[ModifiedOnDate] [datetime] NOT NULL,
+	[ModifiedByUserId] [int] NOT NULL,
+ CONSTRAINT [PK_InspectorIT_DataExpose_Feeds] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DF__Inspector__dateC__5DD5DC5C]') AND type = 'D')
+BEGIN
+ALTER TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds] ADD  CONSTRAINT [DF__Inspector__dateC__5DD5DC5C]  DEFAULT (getdate()) FOR [CreatedOnDate]
+END
+
+GO
+IF NOT EXISTS (SELECT * FROM {databaseOwner}{objectQualifier}sysobjects WHERE id = OBJECT_ID(N'{databaseOwner}[{objectQualifier}DF_InspectorIT_DataExpose_Feeds_ModifiedByDate]') AND type = 'D')
+BEGIN
+ALTER TABLE {databaseOwner}[{objectQualifier}InspectorIT_DataExpose_Feeds] ADD  CONSTRAINT [DF_InspectorIT_DataExpose_Feeds_ModifiedByDate]  DEFAULT (getdate()) FOR [ModifiedOnDate]
+END
+
+GO

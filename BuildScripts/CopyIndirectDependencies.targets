@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+  <PropertyGroup>
+    <CopyIndirectDependencies   
+      Condition="'$(CopyIndirectDependencies)'==''">false</CopyIndirectDependencies>
+    <CopyIndirectDependenciesPdb
+      Condition="'$(CopyIndirectDependenciesPdb)'==''">false</CopyIndirectDependenciesPdb>
+    <CopyIndirectDependenciesXml
+      Condition="'$(CopyIndirectDependenciesXml)'==''">false</CopyIndirectDependenciesXml>
+  </PropertyGroup>
+ 
+ 
+  <!-- BuildXxx part -->
+ 
+  <Target Name="CopyIndirectDependencies"
+          Condition="'$(CopyIndirectDependencies)'=='true'"
+          DependsOnTargets="DetectIndirectDependencies">
+    <Copy Condition="'%(IndirectDependency.FullPath)'!=''"
+          SourceFiles="%(IndirectDependency.FullPath)"
+          DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"
+          SkipUnchangedFiles="true" >
+      <Output TaskParameter="CopiedFiles"
+              ItemName="IndirectDependencyCopied" />
+    </Copy>
+    <Message Importance="high"
+             Condition="'%(IndirectDependencyCopied.FullPath)'!='' 
+               and '%(IndirectDependencyCopied.Extension)'!='.pdb' 
+               and '%(IndirectDependencyCopied.Extension)'!='.xml'"
+             Text="Indirect dependency copied: %(IndirectDependencyCopied.FullPath)" />
+  </Target>
+ 
+  <Target Name="DetectIndirectDependencies"
+          DependsOnTargets="ResolveAssemblyReferences">
+     
+    <Message Importance="high"
+             Text="Direct dependency: %(ReferencePath.Filename)%(ReferencePath.Extension)" />
+    <Message Importance="high"
+             Text="Indirect dependency: %(ReferenceDependencyPaths.Filename)%(ReferenceDependencyPaths.Extension)" />
+ 
+    <!-- Creating indirect dependency list -->
+    <CreateItem Include="%(ReferenceDependencyPaths.FullPath)"
+                Condition="'%(ReferenceDependencyPaths.CopyLocal)'=='true'">
+      <Output TaskParameter="Include"
+              ItemName="_IndirectDependency"/>
+    </CreateItem>
+    <CreateItem Include="%(ReferenceDependencyPaths.RootDir)%(ReferenceDependencyPaths.Directory)%(ReferenceDependencyPaths.Filename).xml"
+                Condition="'%(ReferenceDependencyPaths.CopyLocal)'=='true' and '$(CopyIndirectDependenciesXml)'=='true'">
+      <Output TaskParameter="Include"
+              ItemName="_IndirectDependency"/>
+    </CreateItem>
+    <CreateItem Include="%(ReferenceDependencyPaths.RootDir)%(ReferenceDependencyPaths.Directory)%(ReferenceDependencyPaths.Filename).pdb"
+                Condition="'%(ReferenceDependencyPaths.CopyLocal)'=='true' and '$(CopyIndirectDependenciesPdb)'=='true'">
+      <Output TaskParameter="Include"
+              ItemName="_IndirectDependency"/>
+    </CreateItem>
+ 
+    <!-- Filtering indirect dependency list by existence -->
+    <CreateItem Include="%(_IndirectDependency.FullPath)"
+                Condition="Exists('%(_IndirectDependency.FullPath)')">
+      <Output TaskParameter="Include"
+              ItemName="IndirectDependency"/>
+    </CreateItem>
+ 
+    <!-- Creating copied indirect dependency list -->
+    <CreateItem Include="@(_IndirectDependency->'$(OutputPath)%(Filename)%(Extension)')">
+      <Output TaskParameter="Include"
+              ItemName="_ExistingIndirectDependency"/>
+    </CreateItem>
+ 
+    <!-- Filtering copied indirect dependency list by existence -->
+    <CreateItem Include="%(_ExistingIndirectDependency.FullPath)"
+                Condition="Exists('%(_ExistingIndirectDependency.FullPath)')">
+      <Output TaskParameter="Include"
+              ItemName="ExistingIndirectDependency"/>
+    </CreateItem>
+ 
+  </Target>
+ 
+ 
+  <!-- Build sequence modification -->
+ 
+  <PropertyGroup>
+    <CoreBuildDependsOn>
+      $(CoreBuildDependsOn);
+      CopyIndirectDependencies
+    </CoreBuildDependsOn>
+  </PropertyGroup>
+</Project>
