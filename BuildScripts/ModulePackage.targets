@@ -1,35 +1,48 @@
 <?xml version="1.0" encoding="windows-1252"?>
-
-<!-- WARNING, WARNING, WARNING -->
-<!-- REMEMBER THAT IF YOU MODIFY THE TARGETS FILE YOU NEED TO CLOSE/OPEN THE PROJECT FOR THE CHANGES TO TAKE EFFECT -->
-
 <Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
   <PropertyGroup>
+    <!-- Variable used to fine DNN Manifest File -->
     <DNNFileName>$(AssemblyName)</DNNFileName>
+    <!--Variable used to create the install and source zip file-->
     <PackageName>$(AssemblyName)</PackageName>
+    <!-- Variable used to find the location of the DotNetNuke installation bin folder. Used to get the projects binary DLL.
+    Assumes your your project will be stored in a company/module folder.
+    Ex: DesktopModules/CompanyName/ModuleName/-->
     <MSBuildDnnBinPath Condition="'$(MSBuildDnnBinPath)' == ''">$(MSBuildProjectDirectory)\..\..\..\bin</MSBuildDnnBinPath>
   </PropertyGroup>
-  
+
+  <!-- Imports the community tasks for later use.
+  Used for: versioning, xml reading and writing. Compression. -->
   <Import Project="MSBuild.Community.Tasks.Targets" />
-  
+
+  <!-- Begins the main packaging of the project. This is called from the csproj -->
   <Target Name="PackageModule" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+    <!-- 
+    Versioning of the module. Uses the version.txt file to store it's value. Every day from the StartDate that you build 
+    the package in release mode it will add a new build version number. This allows you to create several builds in the same
+    day as the same version.
+    -->
     <Version BuildType="Automatic" RevisionType="None" VersionFile="version.txt" StartDate="12/6/2012">
       <Output TaskParameter="Major" PropertyName="Major" />
       <Output TaskParameter="Minor" PropertyName="Minor" />
       <Output TaskParameter="Build" PropertyName="Build" />
       <Output TaskParameter="Revision" PropertyName="Revision" />
     </Version>
-    <!-- Write new version to assemblyinfo.cs -->
+    <!-- 
+    Write new version to assemblyinfo.cs. This will make sure that the DLL file is the same version as the manifest. 
+    Keeping everything in sync
+    -->
     <FileUpdate Files="Properties\AssemblyInfo.cs" Encoding="ASCII" Regex="AssemblyVersion\(&quot;.+&quot;\)" ReplacementText="AssemblyVersion(&quot;$(Major).$(Minor).$(Build).$(Revision)&quot;)" />
     <FileUpdate Files="Properties\AssemblyInfo.cs" Encoding="ASCII" Regex="AssemblyFileVersion\(&quot;.+&quot;\)" ReplacementText="AssemblyFileVersion(&quot;$(Major).$(Minor).$(Build).$(Revision)&quot;)" />
 
+    <!--Adds the verion to the DNN manifest -->
     <XmlUpdate Prefix="n"
                 Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
                 XPath="dotnetnuke/packages/package[1]/@version"
                 XmlFileName="$(DNNFileName).dnn" Value="$(Major).$(Minor).$(Build).$(Revision)" />
-      
-    
+
+    <!-- Pulls the version back out from the DNN Manifest and stores it in a variable to be used later to attach to the package zips -->
     <XmlRead Prefix="n"
                     Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
                     XPath="dotnetnuke/packages/package[1]/@version"
@@ -45,12 +58,14 @@
       <Output TaskParameter="Value" PropertyName="DLLS" />
     </XmlRead>
 
+    <!--Assemblies above come out as a string. The need to be split in order loop through each DLL to add it to the zip. -->
     <ItemGroup>
       <SplitDLLs Include="$(DLLS.Split(';'))" />
     </ItemGroup>
 
 
-    <!-- Files that will be added to the root of the package zips -->
+    <!-- Files that will be added to the root of the package zips. These files are linked to in the DNN Manifest in order
+    to show during the Module installation. .HTM files are used to get the most features in the installation. -->
     <ItemGroup>
       <RootFiles Include="**\Documentation\License.htm" />
       <RootFiles Include="**\Documentation\ReleaseNotes.htm" />
@@ -77,7 +92,8 @@
       <DefaultExclude Include="**\*.dnn" />
     </ItemGroup>
 
-    <!-- Files that will be added to the install package. Note the default exclude collection on each item. -->
+    <!-- Files that will be added to the install package. Note the default exclude collection on each item. 
+    NOTE: If any file is missing from the install package simply add the extension here -->
     <ItemGroup>
       <InstallInclude Include="**\*.ascx" Exclude="@(DefaultExclude)" />
       <InstallInclude Include="**\*.asmx" Exclude="@(DefaultExclude)" />
@@ -101,29 +117,36 @@
     </ItemGroup>
             
     
-    <!-- create the INSTALL RESOURCES.ZIP file -->
+    <!-- Copy the files to be used for the INSTALL RESOURCES.ZIP file into a temp folder -->
     <Copy SourceFiles="@(InstallInclude)" DestinationFolder="$(MSBuildProjectDirectory)\ResourcesZip\%(RecursiveDir)" />
 
+    <!-- Creates a variable of all the files found in the Resources.zip temp folder. -->
     <CreateItem Include="$(MSBuildProjectDirectory)\ResourcesZip\**\*.*">
       <Output TaskParameter="Include" ItemName="ResourcesContent" />
     </CreateItem>
-    
+
+    <!-- Creates the Resources.zip file -->
     <Zip Files="@(ResourcesContent)" WorkingDirectory="$(MSBuildProjectDirectory)\ResourcesZip" ZipFileName="Resources.zip" />
+
+    <!-- Moves that Resources.zip to a package folder. -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\Resources.zip" DestinationFolder="package/" />
 
-    <!-- Create the Install package -->
+    <!-- Copies the DLLS needed for the package into the root directory. -->
     <Copy SourceFiles="$(MSBuildDnnBinPath)\%(SplitDLLs.Filename)%(SplitDLLs.Extension)" DestinationFolder="$(MSBuildProjectDirectory)\Package\bin"/>
+    <!-- Copies the files that will be shown in the root of the zip package -->
     <Copy SourceFiles="@(RootFiles)" DestinationFolder="$(MSBuildProjectDirectory)\Package" />
 
+    <!--Creates a variable of all the files in the package folder. This will be used to create the install package.-->
     <CreateItem Include="$(MSBuildProjectDirectory)\Package\**\*.*">
       <Output TaskParameter="Include" ItemName="OutputContent" />
     </CreateItem>
     
-    
+    <!-- Zipps all the files in the package folder and saves it as the INSTALL package. Appends the version number to the end of the file name.-->
     <Zip Files="@(OutputContent)" WorkingDirectory="$(MSBuildProjectDirectory)\Package" ZipFileName="$(PackageName)_$(Version)_Install.zip" />
+    <!--Moves the INSTALL package zip to the packages folder. Install package is now complete. -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\$(PackageName)_$(Version)_Install.zip" DestinationFolder="packages/" />
 
-    <!-- Clean up Files -->
+    <!-- Clean up Files. Remove the ResourcesZip and Package folder. Folders will be reused again for source package. -->
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\Package" />
     <RemoveDir Directories ="$(MSBuildProjectDirectory)\ResourcesZip" />
 
