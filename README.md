@@ -11,6 +11,9 @@ My goal was to create a system wherein a website administrator could reuse conte
 - Share content across multiple sites and third party websites. Web Service can be consumed by jQuery on the client or through server side handlers.
 - Because it utilizes Web API data can transformed as <code>XML</code> or <code>JSON</code> based on Accept Header
 
+See blog post for additional details
+http://inspectorit.com/cms/dotnetnuke-cms/data-expose-module-released-for-dotnetnuke/
+
 ### Installation
 Install like any other module
 
