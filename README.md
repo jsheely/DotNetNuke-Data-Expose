@@ -1,7 +1,27 @@
 DotNetNuke-Data-Expose
 ======================
 
-Expose data from your DotNetNuke database utilizing the Web API framework
+Expose data from your DotNetNuke database utilizing the Web API framework.
+
+My goal was to create a system wherein a website administrator could reuse content in other places in their own DotNetNuke website AND other websites which may or may not even be on the ASP.NET stack (I’m looking at you WordPress).
+
+### How it can be used.
+- Create a web service out of any data within your DotNetNuke Database.
+- Add the feed to the XML/XSL module to clean up the data and show a list of users, articles, quotes, etc.
+- Share content across multiple sites and third party websites. Web Service can be consumed by jQuery on the client or through server side handlers.
+- Because it utilizes Web API data can transformed as <code>XML</code> or <code>JSON</code> based on Accept Header
+
+### Installation
+Install like any other module
+
+### Requirements
+Data Expose requires DotNetNuke 7.0 or higher and that’s it!
+
+### Roadmap
+The #1 feature on the road map is to bind service calls to the DotNetNuke business layer API and grant the ability to use SQL or direct API calls. Please give it a try and let me know what you think or if there are any additional features you would like to see added.
+
+
+### License
 
 <h4>New BSD License (BSD)</h4>
 <p id="license_text">Copyright (c) 2012, Jonathan Sheely<br>All rights reserved.</p>
